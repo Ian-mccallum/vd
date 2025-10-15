@@ -58,7 +58,7 @@ const profiles = [
     {
         name: 'Jorge "Genius"',
         age: '21',
-        image: 'jorge.jpg',
+        image: 'jorge.JPG',
         bio: 'IQ: 420. Smarter than Einstein. I\'ll teach you quantum physics while I steal your heart. 🧠',
         rizz: '∞',
         mog: '999%',
@@ -67,7 +67,7 @@ const profiles = [
     {
         name: 'Jacob',
         age: '23',
-        image: 'jacob.jpg',
+        image: 'jacob.JPG',
         bio: 'Experienced. Melodycita\'s favorite. I roast harder than a 6th grader. Prepare yourself. 🔥',
         rizz: '93',
         mog: '88%',
@@ -76,7 +76,7 @@ const profiles = [
     {
         name: 'Imanol',
         age: '19',
-        image: 'imanol.jpg',
+        image: 'imanol.JPG',
         bio: 'Teenage freakbag. Media pass collector. I get freaky anywhere, anytime. No limits. 😈',
         rizz: '96',
         mog: '91%',
