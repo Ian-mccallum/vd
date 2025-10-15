@@ -457,6 +457,6 @@ style.textContent = `
 `;
 document.head.appendChild(style);
 
-console.log('🔥 Welcome to Amir.com - The Rizzler\'s Domain! 🔥');
+console.log('🔥 Welcome to HuzzFrick.com - The Rizzler\'s Domain! 🔥');
 console.log('💡 Pro tip: Try the Konami code for a surprise! ⬆️⬆️⬇️⬇️⬅️➡️⬅️➡️BA');
 
