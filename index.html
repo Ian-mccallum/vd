@@ -1,0 +1,325 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Amir.com - The Rizzler's Domain 🔥</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="hearts-container" id="heartsContainer"></div>
+    
+    <header>
+        <h1 class="glitch" data-text="AMIR.COM">AMIR.COM</h1>
+        <p class="subtitle">The Official Rizz Headquarters</p>
+    </header>
+
+    <div class="rizz-meter-container">
+        <h2>🔥 RIZZ METER 🔥</h2>
+        <div class="meter-bar">
+            <div class="meter-fill" id="rizzMeter"></div>
+        </div>
+        <p class="meter-text" id="rizzText">Loading rizz levels...</p>
+        <button class="activate-btn" id="activateRizz">ACTIVATE MAXIMUM RIZZ</button>
+    </div>
+
+    <div class="gallery-section">
+        <h2 class="section-title">📸 The Amir Chronicles</h2>
+        <div class="image-gallery" id="imageGallery">
+            <div class="gallery-item" data-caption="Amir Level 1: The Beginning">
+                <img src="amir1.JPG" alt="Amir 1">
+                <div class="caption">The Journey Begins</div>
+            </div>
+            <div class="gallery-item" data-caption="Amir Level 2: The Evolution">
+                <img src="amir2.JPG" alt="Amir 2">
+                <div class="caption">Peak Performance</div>
+            </div>
+            <div class="gallery-item" data-caption="Amir Level 3: The Legend">
+                <img src="amir3.JPG" alt="Amir 3">
+                <div class="caption">Living Legend</div>
+            </div>
+            <div class="gallery-item" data-caption="Certified Cutie Alert 🚨">
+                <img src="amircute.JPG" alt="Amir Cute">
+                <div class="caption">Certified Cutie™</div>
+            </div>
+            <div class="gallery-item" data-caption="The Tuffness Level: MAXIMUM">
+                <img src="tuffness.JPG" alt="Tuffness">
+                <div class="caption">Tuff Guy Status</div>
+            </div>
+            <div class="gallery-item" data-caption="Special Guest: Isaac">
+                <img src="isaac1.JPG" alt="Isaac">
+                <div class="caption">Isaac's Cameo</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="message-section">
+        <h2 class="section-title">💌 Click for a Message</h2>
+        <button class="message-btn" id="messageBtn">Click Me, Melodycita! 💕</button>
+        <div class="message-box" id="messageBox"></div>
+    </div>
+
+    <div class="mogging-section">
+        <h2 class="section-title">😎 ISAAC'S MOGGING ARENA 😎</h2>
+        
+        <div class="battle-arena">
+            <div class="fighter isaac-side">
+                <h3>🏆 THE MOGGER 🏆</h3>
+                <img src="isaac1.JPG" alt="Isaac Mogging" class="isaac-mog" id="isaacMog">
+                <p class="fighter-name">ISAAC</p>
+                <div class="power-level">Power Level: ∞</div>
+            </div>
+            
+            <div class="vs-section">
+                <div class="vs-text">VS</div>
+                <button class="mog-btn" id="mogBtn">START MOG BATTLE</button>
+                <p class="battle-result" id="battleResult"></p>
+            </div>
+            
+            <div class="fighter challenger-side">
+                <h3>😬 THE CHALLENGER 😬</h3>
+                <img src="amir1.JPG" alt="Challenger" class="challenger-img" id="challengerImg">
+                <p class="fighter-name" id="challengerName">AMIR</p>
+                <div class="power-level" id="challengerPower">Power Level: ???</div>
+            </div>
+        </div>
+        
+        <div class="mog-stats-container">
+            <div class="mog-meter-container">
+                <h3>🔥 MOG INTENSITY METER 🔥</h3>
+                <div class="mog-bar">
+                    <div class="mog-fill" id="mogFill">MOGGING</div>
+                </div>
+                <p class="mog-status" id="mogStatus">Status: ACTIVELY MOGGING</p>
+            </div>
+            
+            <div class="mogging-facts">
+                <h3>📊 Isaac's Stats:</h3>
+                <ul class="stats-list">
+                    <li>✅ Confidence Level: MAXIMUM</li>
+                    <li>✅ Pose Game: LEGENDARY</li>
+                    <li>✅ Aura Points: 9999/100</li>
+                    <li>✅ Haters Detected: 0</li>
+                    <li>✅ Mog Radius: 50 meter AOE</li>
+                </ul>
+                <p class="mog-counter">Victories: <span id="mogCounter">0</span></p>
+            </div>
+        </div>
+        
+        <div class="mogging-quotes">
+            <p class="quote" id="mogQuote">"Isaac doesn't just walk into a room, he mogs into it." - Ancient Proverb</p>
+        </div>
+    </div>
+
+    <div class="interactive-section">
+        <h2 class="section-title">🎮 The Rizz Game</h2>
+        <div class="game-container">
+            <p class="game-text">How many times can you click the smiley in 10 seconds?</p>
+            <img src="smiley.PNG" alt="Smiley" class="clickable-smiley" id="smiley">
+            <p class="score">Score: <span id="score">0</span></p>
+            <p class="timer">Time: <span id="timer">10</span>s</p>
+            <button class="start-btn" id="startGame">Start Game</button>
+            <p class="high-score" id="highScore">High Score: 0</p>
+        </div>
+    </div>
+
+    <div class="question-section">
+        <h2 class="section-title">❓ The Ultimate Question</h2>
+        <p class="question-text">Melodycita, will you accept this rizz?</p>
+        <div class="button-container">
+            <button class="yes-btn" id="yesBtn">YES! 😍</button>
+            <button class="no-btn" id="noBtn">No...</button>
+        </div>
+        <div class="response" id="response"></div>
+    </div>
+
+    <div class="chat-section">
+        <h2 class="section-title">💬 Live Rizz Chat 💬</h2>
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="online-status">
+                    <span class="status-dot"></span>
+                    <span id="onlineCount">0</span> online
+                </div>
+            </div>
+            <div class="chat-messages" id="chatMessages">
+                <div class="chat-welcome">Welcome to the Rizz Chat! Say something! 🔥</div>
+            </div>
+            <div class="chat-input-container">
+                <input 
+                    type="text" 
+                    id="usernameInput" 
+                    placeholder="Your name..." 
+                    maxlength="20"
+                    class="username-input"
+                >
+                <input 
+                    type="text" 
+                    id="messageInput" 
+                    placeholder="Type your message..." 
+                    maxlength="200"
+                    class="message-input"
+                >
+                <button id="sendBtn" class="send-btn">Send 🚀</button>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>© 2025 Amir.com - Where Rizz Meets Reality</p>
+        <p class="footer-note">Built with 100% Pure Rizz Energy™</p>
+    </footer>
+
+    <script src="script.js"></script>
+    
+    <!-- Firebase CDN -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue, onDisconnect, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyCdhX0NRDYY6_J0nJknJWeqALzV2gb213A",
+            authDomain: "issaac-52d8d.firebaseapp.com",
+            databaseURL: "https://issaac-52d8d-default-rtdb.firebaseio.com",
+            projectId: "issaac-52d8d",
+            storageBucket: "issaac-52d8d.firebasestorage.app",
+            messagingSenderId: "949896369117",
+            appId: "1:949896369117:web:665940c8f7bd79fe215c34",
+            measurementId: "G-NFCC35BS56"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const database = getDatabase(app);
+
+        // Chat elements
+        const messageInput = document.getElementById('messageInput');
+        const usernameInput = document.getElementById('usernameInput');
+        const sendBtn = document.getElementById('sendBtn');
+        const chatMessages = document.getElementById('chatMessages');
+        const onlineCount = document.getElementById('onlineCount');
+
+        // Load or generate username
+        let username = localStorage.getItem('chatUsername');
+        if (!username) {
+            username = 'User' + Math.floor(Math.random() * 10000);
+            localStorage.setItem('chatUsername', username);
+        }
+        usernameInput.value = username;
+
+        // Update username on change
+        usernameInput.addEventListener('change', () => {
+            username = usernameInput.value.trim() || 'Anonymous';
+            localStorage.setItem('chatUsername', username);
+        });
+
+        // Send message function
+        function sendMessage() {
+            const message = messageInput.value.trim();
+            if (!message) return;
+
+            const messagesRef = ref(database, 'messages');
+            push(messagesRef, {
+                username: username,
+                message: message,
+                timestamp: serverTimestamp()
+            });
+
+            messageInput.value = '';
+        }
+
+        // Send on button click
+        sendBtn.addEventListener('click', sendMessage);
+
+        // Send on Enter key
+        messageInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                sendMessage();
+            }
+        });
+
+        // Listen for messages
+        const messagesRef = ref(database, 'messages');
+        onValue(messagesRef, (snapshot) => {
+            chatMessages.innerHTML = '';
+            const messages = [];
+            
+            snapshot.forEach((childSnapshot) => {
+                messages.push({
+                    key: childSnapshot.key,
+                    ...childSnapshot.val()
+                });
+            });
+
+            // Sort by timestamp and keep last 50 messages
+            messages.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+            const recentMessages = messages.slice(-50);
+
+            if (recentMessages.length === 0) {
+                chatMessages.innerHTML = '<div class="chat-welcome">Welcome to the Rizz Chat! Say something! 🔥</div>';
+            } else {
+                recentMessages.forEach((data) => {
+                    const messageDiv = document.createElement('div');
+                    messageDiv.className = 'chat-message';
+                    
+                    const isCurrentUser = data.username === username;
+                    if (isCurrentUser) {
+                        messageDiv.classList.add('own-message');
+                    }
+                    
+                    messageDiv.innerHTML = `
+                        <span class="message-username">${escapeHtml(data.username)}:</span>
+                        <span class="message-text">${escapeHtml(data.message)}</span>
+                    `;
+                    
+                    chatMessages.appendChild(messageDiv);
+                });
+                
+                // Auto scroll to bottom
+                chatMessages.scrollTop = chatMessages.scrollHeight;
+            }
+        });
+
+        // Online presence
+        const sessionId = Date.now() + '_' + Math.floor(Math.random() * 1000000);
+        const presenceRef = ref(database, 'presence/' + sessionId);
+        
+        set(presenceRef, {
+            online: true,
+            timestamp: serverTimestamp()
+        });
+
+        onDisconnect(presenceRef).remove();
+
+        // Count online users
+        const presenceListRef = ref(database, 'presence');
+        onValue(presenceListRef, (snapshot) => {
+            const count = snapshot.size;
+            onlineCount.textContent = count;
+        });
+
+        // Clean up old presence (older than 5 minutes)
+        setInterval(() => {
+            onValue(presenceListRef, (snapshot) => {
+                const now = Date.now();
+                snapshot.forEach((childSnapshot) => {
+                    const data = childSnapshot.val();
+                    if (data.timestamp && (now - data.timestamp > 300000)) {
+                        set(ref(database, 'presence/' + childSnapshot.key), null);
+                    }
+                });
+            }, { onlyOnce: true });
+        }, 60000);
+
+        // HTML escape function
+        function escapeHtml(text) {
+            const div = document.createElement('div');
+            div.textContent = text;
+            return div.innerHTML;
+        }
+    </script>
+</body>
+</html>
+
