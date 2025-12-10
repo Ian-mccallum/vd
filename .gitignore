@@ -1,0 +1,47 @@
+# Archive files - ignore ZIPs and other archives
+*.zip
+*.rar
+*.7z
+*.tar
+*.gz
+
+# PDF files
+*.pdf
+
+# Vector graphics files
+*.eps
+*.ai
+*.svg
+
+# Screenshots
+Screenshot*.jpg
+Screenshot*.png
+Screenshot*.jpeg
+
+# OS files
+.DS_Store
+Thumbs.db
+desktop.ini
+
+# Editor files
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# Node modules (if you add any later)
+node_modules/
+package-lock.json
+yarn.lock
+
+# Build files
+dist/
+build/
+*.min.js
+*.min.css
+
+# Log files
+*.log
+npm-debug.log*
+
