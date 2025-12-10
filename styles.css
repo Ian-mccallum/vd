@@ -96,6 +96,67 @@ header {
     font-style: italic;
 }
 
+.theater-link {
+    margin: 15px 20px;
+    padding: 18px 50px;
+    font-size: 1.4rem;
+    background: linear-gradient(135deg, #8b0000 0%, #ff0000 50%, #ff4500 100%);
+    color: white;
+    border: 3px solid #ffd700;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 
+        0 8px 25px rgba(139, 0, 0, 0.5),
+        0 0 20px rgba(255, 215, 0, 0.3),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 1px;
+}
+
+.theater-link::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.theater-link:hover::before {
+    left: 100%;
+}
+
+.theater-link:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 
+        0 15px 40px rgba(139, 0, 0, 0.7),
+        0 0 30px rgba(255, 215, 0, 0.5),
+        inset 0 1px 0 rgba(255, 255, 255, 0.3);
+    border-color: #ffed4e;
+    background: linear-gradient(135deg, #a00000 0%, #ff1a1a 50%, #ff5500 100%);
+}
+
+.theater-link:active {
+    transform: translateY(-1px) scale(1.02);
+    box-shadow: 
+        0 8px 20px rgba(139, 0, 0, 0.6),
+        0 0 15px rgba(255, 215, 0, 0.4);
+}
+
+.theater-link:focus {
+    outline: none;
+    box-shadow: 
+        0 8px 25px rgba(139, 0, 0, 0.5),
+        0 0 30px rgba(255, 215, 0, 0.6),
+        inset 0 1px 0 rgba(255, 255, 255, 0.2);
+}
+
 .dating-app-link {
     margin-top: 20px;
     padding: 15px 40px;
@@ -117,6 +178,208 @@ header {
 
 .dating-app-link:active {
     transform: scale(0.95);
+}
+
+/* The Dre Movie Hero Section */
+.dre-movie-hero {
+    max-width: 1400px;
+    margin: 50px auto;
+    padding: 40px 20px;
+    background: linear-gradient(135deg, rgba(139, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.5) 100%);
+    border-radius: 30px;
+    backdrop-filter: blur(15px);
+    border: 3px solid rgba(255, 215, 0, 0.5);
+    box-shadow: 
+        0 0 50px rgba(139, 0, 0, 0.5),
+        inset 0 0 30px rgba(255, 215, 0, 0.1);
+    position: relative;
+    overflow: hidden;
+}
+
+.dre-movie-hero::before {
+    content: '';
+    position: absolute;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(255, 215, 0, 0.1) 0%, transparent 70%);
+    animation: heroGlow 4s ease-in-out infinite;
+}
+
+@keyframes heroGlow {
+    0%, 100% {
+        transform: rotate(0deg);
+        opacity: 0.5;
+    }
+    50% {
+        transform: rotate(180deg);
+        opacity: 0.8;
+    }
+}
+
+.hero-content {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr;
+    gap: 40px;
+    align-items: center;
+    position: relative;
+    z-index: 1;
+}
+
+.hero-poster {
+    position: relative;
+    perspective: 1000px;
+}
+
+.movie-poster-img {
+    width: 100%;
+    max-width: 400px;
+    border-radius: 20px;
+    border: 5px solid #ffd700;
+    box-shadow: 
+        0 20px 60px rgba(0, 0, 0, 0.8),
+        0 0 40px rgba(255, 215, 0, 0.4);
+    transition: transform 0.3s ease;
+    display: block;
+    margin: 0 auto;
+}
+
+.movie-poster-img:hover {
+    transform: rotateY(5deg) scale(1.02);
+    box-shadow: 
+        0 25px 70px rgba(0, 0, 0, 0.9),
+        0 0 50px rgba(255, 215, 0, 0.6);
+}
+
+.hero-info {
+    text-align: left;
+}
+
+.hero-title {
+    font-size: 3.5rem;
+    font-weight: bold;
+    margin-bottom: 15px;
+    text-shadow: 
+        0 0 20px rgba(255, 215, 0, 0.8),
+        0 0 40px rgba(255, 215, 0, 0.5);
+    color: #ffd700;
+    letter-spacing: 3px;
+    animation: titlePulse 2s ease-in-out infinite;
+}
+
+@keyframes titlePulse {
+    0%, 100% {
+        text-shadow: 
+            0 0 20px rgba(255, 215, 0, 0.8),
+            0 0 40px rgba(255, 215, 0, 0.5);
+    }
+    50% {
+        text-shadow: 
+            0 0 30px rgba(255, 215, 0, 1),
+            0 0 60px rgba(255, 215, 0, 0.8);
+    }
+}
+
+.hero-tagline {
+    font-size: 1.5rem;
+    margin-bottom: 25px;
+    color: #ffd700;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+.box-office-estimate {
+    background: linear-gradient(135deg, rgba(255, 215, 0, 0.2) 0%, rgba(255, 140, 0, 0.2) 100%);
+    border: 2px solid #ffd700;
+    border-radius: 15px;
+    padding: 20px 30px;
+    margin-bottom: 25px;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
+    box-shadow: 0 0 30px rgba(255, 215, 0, 0.3);
+}
+
+.estimate-label {
+    font-size: 1.1rem;
+    color: #ccc;
+    font-weight: bold;
+}
+
+.estimate-amount {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #ffd700;
+    text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+    letter-spacing: 2px;
+    animation: moneyGlow 3s ease-in-out infinite;
+}
+
+@keyframes moneyGlow {
+    0%, 100% {
+        text-shadow: 0 0 20px rgba(255, 215, 0, 0.8);
+        transform: scale(1);
+    }
+    50% {
+        text-shadow: 0 0 40px rgba(255, 215, 0, 1);
+        transform: scale(1.02);
+    }
+}
+
+.hero-description {
+    font-size: 1.2rem;
+    line-height: 1.6;
+    margin-bottom: 30px;
+    color: #fff;
+    opacity: 0.95;
+}
+
+.hero-cta-btn {
+    padding: 20px 50px;
+    font-size: 1.5rem;
+    background: linear-gradient(135deg, #8b0000 0%, #ff0000 50%, #ff4500 100%);
+    color: white;
+    border: 3px solid #ffd700;
+    border-radius: 50px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    box-shadow: 
+        0 10px 30px rgba(139, 0, 0, 0.6),
+        0 0 20px rgba(255, 215, 0, 0.4);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+    letter-spacing: 1px;
+}
+
+.hero-cta-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+    transition: left 0.5s ease;
+}
+
+.hero-cta-btn:hover::before {
+    left: 100%;
+}
+
+.hero-cta-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 
+        0 15px 40px rgba(139, 0, 0, 0.8),
+        0 0 30px rgba(255, 215, 0, 0.6);
+    border-color: #ffed4e;
+    background: linear-gradient(135deg, #a00000 0%, #ff1a1a 50%, #ff5500 100%);
+}
+
+.hero-cta-btn:active {
+    transform: translateY(-1px) scale(1.02);
 }
 
 /* Rizz Meter */
@@ -1116,6 +1379,34 @@ footer {
     .send-btn {
         width: 80px;
         padding: 12px 10px;
+    }
+    
+    .hero-content {
+        grid-template-columns: 1fr;
+        gap: 30px;
+    }
+    
+    .hero-title {
+        font-size: 2.2rem;
+        white-space: nowrap;
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 0.3em;
+        letter-spacing: 2px;
+    }
+    
+    .estimate-amount {
+        font-size: 2rem;
+    }
+    
+    .hero-cta-btn {
+        font-size: 1.2rem;
+        padding: 18px 40px;
+    }
+    
+    .movie-poster-img {
+        max-width: 100%;
     }
 }
 
