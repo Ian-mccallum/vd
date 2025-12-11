@@ -1,5 +1,14 @@
 // Movie Theater JavaScript Functionality
 
+// Google Drive Video File ID
+// IMPORTANT: For the video to work when deployed, ensure the Google Drive file is set to:
+// 1. Right-click the file in Google Drive
+// 2. Click "Share"
+// 3. Set to "Anyone with the link can view" (not "Restricted")
+// 4. This allows the video to be embedded on any website
+const GOOGLE_DRIVE_FILE_ID = '1LNZ_g-ubh5D-E-5SC4rdsl2XGoWVrEte';
+const GOOGLE_DRIVE_EMBED_URL = `https://drive.google.com/file/d/${GOOGLE_DRIVE_FILE_ID}/preview`;
+
 // Generate showtimes for "The Dre Movie"
 function generateShowtimes() {
     const showtimesGrid = document.getElementById('showtimesGrid');
@@ -55,6 +64,52 @@ function generateShowtimes() {
         }
         showtimeIndex++;
     }
+    
+    // TEST SHOWTIMES: Add test showtimes for today at the top
+    const today = new Date();
+    
+    // Test showtime 1: 9:33 PM
+    const testShowtimeDate1 = new Date(today);
+    testShowtimeDate1.setHours(21, 33, 0, 0); // 9:33 PM (21:33 in 24-hour format)
+    
+    const testDateStr1 = testShowtimeDate1.toLocaleDateString('en-US', { 
+        weekday: 'long', 
+        month: 'long', 
+        day: 'numeric',
+        year: 'numeric'
+    });
+    
+    const testShowtime1 = {
+        date: testDateStr1,
+        time: formatTime(21, 33), // 9:33 PM
+        fullDate: testShowtimeDate1,
+        id: 'showtime-test-1',
+        isTest: true // Mark as test showtime
+    };
+    
+    // Test showtime 2: 10:00 PM
+    const testShowtimeDate2 = new Date(today);
+    testShowtimeDate2.setHours(22, 0, 0, 0); // 10:00 PM (22:00 in 24-hour format)
+    
+    const testDateStr2 = testShowtimeDate2.toLocaleDateString('en-US', { 
+        weekday: 'long', 
+        month: 'long', 
+        day: 'numeric',
+        year: 'numeric'
+    });
+    
+    const testShowtime2 = {
+        date: testDateStr2,
+        time: formatTime(22, 0), // 10:00 PM
+        fullDate: testShowtimeDate2,
+        id: 'showtime-test-2',
+        isTest: true // Mark as test showtime
+    };
+    
+    // Add test showtimes at the beginning of the array
+    // Order: 9:33 PM first, then 10:00 PM (unshift adds to beginning, so add in reverse order)
+    showtimes.unshift(testShowtime2); // 10:00 PM (added first, appears second)
+    showtimes.unshift(testShowtime1); // 9:33 PM (added second, appears first)
     
     // Store showtimes globally
     allShowtimes = showtimes;
@@ -114,7 +169,11 @@ function renderShowtimes(showtimes) {
             statusText = 'AVAILABLE';
         }
         
+        // Add TEST indicator for test showtime
+        const testIndicator = showtime.isTest ? '<div style="background: #ff6b00; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; margin-bottom: 8px; display: inline-block;">🧪 TEST</div>' : '';
+        
         card.innerHTML = `
+            ${testIndicator}
             <div class="showtime-time">${showtime.time}</div>
             <div class="showtime-status status-${status}">
                 ${statusText}
@@ -269,7 +328,7 @@ function updateTrailerContent() {
 // Play the movie
 function playMovie(showtime) {
     const videoContainer = document.getElementById('videoPlayerContainer');
-    const videoPlayer = document.getElementById('moviePlayer');
+    const youtubePlayerDiv = document.getElementById('youtubePlayer');
     const loadingOverlay = document.getElementById('videoLoadingOverlay');
     const loadingProgress = document.getElementById('loadingProgress');
     const progressFill = document.getElementById('progressFill');
@@ -289,7 +348,6 @@ function playMovie(showtime) {
     
     // Show loading overlay with trailers
     loadingOverlay.style.display = 'flex';
-    videoPlayer.style.display = 'block';
     videoContainer.style.display = 'flex';
     
     // Start trailer rotation
@@ -297,142 +355,42 @@ function playMovie(showtime) {
     updateTrailerContent();
     trailerInterval = setInterval(updateTrailerContent, 3000); // Change trailer every 3 seconds
     
-    // Try to load the video file
-    const videoFileName = 'the-dre-movie.mp4';
-    
-    // Optimize video settings for large files
-    videoPlayer.preload = 'auto'; // Load the entire video
-    videoPlayer.load(); // Reset video element
-    
-    // Additional optimizations for large files
-    videoPlayer.setAttribute('playsinline', 'true');
-    videoPlayer.setAttribute('webkit-playsinline', 'true');
-    
-    // Enable hardware acceleration hints
-    videoPlayer.style.transform = 'translateZ(0)';
-    videoPlayer.style.willChange = 'auto';
-    
-    // Track loading progress
-    let progressInterval;
-    function updateLoadingProgress() {
-        if (videoPlayer.buffered.length > 0 && videoPlayer.duration > 0) {
-            const bufferedEnd = videoPlayer.buffered.end(videoPlayer.buffered.length - 1);
-            const percent = Math.round((bufferedEnd / videoPlayer.duration) * 100);
-            loadingProgress.textContent = `Loading... ${percent}%`;
-            progressFill.style.width = `${percent}%`;
-        } else if (videoPlayer.readyState >= 1) {
-            // Show metadata loading
-            loadingProgress.textContent = 'Preparing...';
+    // Simulate loading progress
+    let progressPercent = 0;
+    const progressInterval = setInterval(() => {
+        if (progressPercent < 90) {
+            progressPercent += 5;
+            loadingProgress.textContent = `Loading... ${progressPercent}%`;
+            progressFill.style.width = `${progressPercent}%`;
         }
-    }
+    }, 200);
     
-    // Set up progress tracking
-    progressInterval = setInterval(updateLoadingProgress, 200);
-    
-    // Handle buffering states
-    let bufferingTimeout;
-    
-    videoPlayer.addEventListener('waiting', () => {
-        bufferingTimeout = setTimeout(() => {
-            bufferingIndicator.style.display = 'flex';
-        }, 500);
-    });
-    
-    videoPlayer.addEventListener('playing', () => {
-        clearTimeout(bufferingTimeout);
-        bufferingIndicator.style.display = 'none';
-    });
-    
-    // Monitor for stalls during playback
-    videoPlayer.addEventListener('timeupdate', () => {
-        const currentTime = videoPlayer.currentTime;
-        const buffered = videoPlayer.buffered;
+    // Create Google Drive video iframe
+    const createGoogleDrivePlayer = () => {
+        // Clear the div
+        youtubePlayerDiv.innerHTML = '';
         
-        if (buffered.length > 0) {
-            const bufferedEnd = buffered.end(buffered.length - 1);
-            const timeUntilBufferEnd = bufferedEnd - currentTime;
-            
-            // If buffer is running low (less than 3 seconds), show indicator
-            if (timeUntilBufferEnd < 3 && !videoPlayer.paused) {
-                if (!bufferingIndicator.style.display || bufferingIndicator.style.display === 'none') {
-                    bufferingIndicator.style.display = 'flex';
-                }
-            } else {
-                bufferingIndicator.style.display = 'none';
-            }
-        }
-    });
-    
-    videoPlayer.addEventListener('canplay', () => {
-        clearTimeout(bufferingTimeout);
-        bufferingIndicator.style.display = 'none';
-        // Don't hide loading overlay here - wait for canplaythrough
-    });
-    
-    videoPlayer.addEventListener('progress', () => {
-        updateLoadingProgress();
-    });
-    
-    // Load video with optimized settings
-    videoPlayer.src = videoFileName;
-    
-    // Set up video for optimal playback
-    videoPlayer.addEventListener('loadedmetadata', () => {
-        // Video metadata loaded, now we can start buffering
-        videoPlayer.preload = 'auto'; // Start loading video data
-        loadingProgress.textContent = 'Preparing playback...';
-    });
-    
-    // Show placeholder if video fails to load
-    videoPlayer.addEventListener('error', (e) => {
-        clearInterval(progressInterval);
-        clearInterval(trailerInterval);
-        clearTimeout(bufferingTimeout);
-        loadingOverlay.style.display = 'none';
-        bufferingIndicator.style.display = 'none';
-        if (theaterEnvironment) {
-            theaterEnvironment.style.display = 'none';
-        }
-        videoPlayer.style.display = 'none';
+        // Create iframe for Google Drive video
+        const iframe = document.createElement('iframe');
+        iframe.src = GOOGLE_DRIVE_EMBED_URL;
+        iframe.width = '100%';
+        iframe.height = '100%';
+        iframe.frameBorder = '0';
+        iframe.allow = 'accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share';
+        iframe.allowFullscreen = true;
+        iframe.style.border = '0';
+        iframe.style.borderRadius = '8px';
+        iframe.style.display = 'block';
         
-        const videoContainerDiv = document.querySelector('.video-container');
-        const placeholder = document.createElement('div');
-        placeholder.className = 'video-placeholder';
-        placeholder.style.cssText = `
-            width: 100%;
-            aspect-ratio: 16/9;
-            background: linear-gradient(135deg, #1a1a1a 0%, #2d1a1a 100%);
-            display: flex;
-            flex-direction: column;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            text-align: center;
-            padding: 40px;
-            border-radius: 8px;
-        `;
-        placeholder.innerHTML = `
-            <div style="font-size: 5rem; margin-bottom: 20px;">🎬</div>
-            <h2 style="font-size: 2rem; margin-bottom: 15px; color: #ffd700;">The Dre Movie</h2>
-            <p style="font-size: 1.2rem; margin-bottom: 10px;">Video file will be uploaded soon!</p>
-            <p style="font-size: 1rem; color: #ccc;">Runtime: 2 minutes</p>
-            <p style="font-size: 1rem; color: #ccc; margin-top: 20px;">Showtime: ${showtime.date} at ${showtime.time}</p>
-            <p style="font-size: 0.9rem; color: #888; margin-top: 15px;">Please upload the video file as "${videoFileName}"</p>
-        `;
-        if (videoContainerDiv) {
-            videoContainerDiv.appendChild(placeholder);
-        }
-    });
-    
-    // Only play when FULLY loaded (canplaythrough means entire video is buffered)
-    let hasStartedPlaying = false;
-    const theaterEnvironment = document.getElementById('theaterEnvironment');
-    
-    videoPlayer.addEventListener('canplaythrough', () => {
-        if (!hasStartedPlaying) {
-            hasStartedPlaying = true;
+        // Add iframe to container
+        youtubePlayerDiv.appendChild(iframe);
+        
+        // Wait for iframe to load
+        iframe.addEventListener('load', () => {
+            console.log('✅ Google Drive video loaded');
             clearInterval(progressInterval);
-            clearInterval(trailerInterval);
+            loadingProgress.textContent = '100%';
+            progressFill.style.width = '100%';
             
             // Update to final loading message
             const trailerContent = document.getElementById('trailerContent');
@@ -444,49 +402,76 @@ function playMovie(showtime) {
                 `;
             }
             
-            // Wait 2 seconds then hide overlay, show theater, and play
+            // Wait 2 seconds then hide overlay
             setTimeout(() => {
                 loadingOverlay.style.display = 'none';
-                loadingProgress.textContent = '100%';
-                progressFill.style.width = '100%';
+                bufferingIndicator.style.display = 'none';
                 
-                // Show theater background (subtle)
+                // Show theater background
+                const theaterEnvironment = document.getElementById('theaterEnvironment');
                 if (theaterEnvironment) {
                     theaterEnvironment.style.display = 'block';
                 }
                 
-                // Auto-play when fully loaded
-                videoPlayer.play().catch(err => {
-                    console.log('Autoplay prevented, user interaction required:', err);
-                    loadingOverlay.style.display = 'none';
-                    if (theaterEnvironment) {
-                        theaterEnvironment.style.display = 'block';
+                // Try to autoplay (may require user interaction)
+                try {
+                    iframe.contentWindow.postMessage('{"event":"command","func":"playVideo","args":""}', '*');
+                } catch (e) {
+                    console.log('Autoplay may require user interaction');
+                }
+                
+                // Handle fullscreen on mobile landscape
+                const isMobile = window.innerWidth <= 768;
+                if (isMobile && window.orientation !== undefined) {
+                    // Check if already in landscape
+                    if (Math.abs(window.orientation) === 90) {
+                        setTimeout(() => {
+                            toggleFullscreen(iframe);
+                        }, 500);
                     }
-                });
+                }
             }, 2000);
-        }
-    });
+        });
+        
+        // Handle iframe errors
+        iframe.addEventListener('error', () => {
+            console.error('❌ Google Drive video error');
+            clearInterval(progressInterval);
+            clearInterval(trailerInterval);
+            loadingOverlay.style.display = 'none';
+            bufferingIndicator.style.display = 'none';
+            
+            youtubePlayerDiv.innerHTML = `
+                <div style="width: 100%; aspect-ratio: 16/9; background: linear-gradient(135deg, #1a1a1a 0%, #2d1a1a 100%); display: flex; flex-direction: column; align-items: center; justify-content: center; color: white; text-align: center; padding: 40px; border-radius: 8px;">
+                    <div style="font-size: 5rem; margin-bottom: 20px;">🎬</div>
+                    <h2 style="font-size: 2rem; margin-bottom: 15px; color: #ffd700;">The Dre Movie</h2>
+                    <p style="font-size: 1.2rem; margin-bottom: 10px; color: #ff6b6b;">Error loading video</p>
+                    <p style="font-size: 1rem; color: #ccc;">Runtime: 2 minutes</p>
+                    <p style="font-size: 1rem; color: #ccc; margin-top: 20px;">Showtime: ${showtime.date} at ${showtime.time}</p>
+                    <p style="font-size: 0.8rem; color: #666; margin-top: 10px;">Please ensure the Google Drive file is set to "Anyone with the link can view".</p>
+                </div>
+            `;
+        });
+    };
     
-    // Update progress during loading
-    videoPlayer.addEventListener('progress', () => {
-        updateLoadingProgress();
-    });
+    // Start creating the player
+    createGoogleDrivePlayer();
     
     // Close video function
     function closeVideo() {
         clearInterval(progressInterval);
         clearInterval(trailerInterval);
-        clearTimeout(bufferingTimeout);
         videoContainer.style.display = 'none';
-        videoPlayer.pause();
-        videoPlayer.currentTime = 0;
-        videoPlayer.src = ''; // Clear source to stop loading
+        
+        // Clear the iframe
+        youtubePlayerDiv.innerHTML = '';
         loadingOverlay.style.display = 'flex';
         bufferingIndicator.style.display = 'none';
+        
+        const theaterEnvironment = document.getElementById('theaterEnvironment');
         if (theaterEnvironment) {
             theaterEnvironment.style.display = 'none';
         }
-        hasStartedPlaying = false;
     }
     
     // Click outside video container to close
@@ -500,7 +485,7 @@ function playMovie(showtime) {
         }
     });
     
-    // Prevent closing when clicking on video
+    // Prevent closing when clicking on YouTube player
     if (videoContainerDiv) {
         videoContainerDiv.addEventListener('click', (e) => {
             e.stopPropagation();
@@ -535,103 +520,6 @@ function playMovie(showtime) {
         }
     }
     document.addEventListener('keydown', escapeHandler);
-    
-    // Mobile: Auto fullscreen on landscape orientation
-    const isMobile = /iPhone|iPad|iPod|Android/i.test(navigator.userAgent);
-    let orientationHandler;
-    let isFullscreen = false;
-    
-    if (isMobile) {
-        const checkAndEnterFullscreen = () => {
-            const isLandscape = window.innerWidth > window.innerHeight;
-            const videoElement = videoPlayer;
-            const containerElement = videoContainer;
-            
-            if (isLandscape && containerElement.style.display === 'flex' && !videoPlayer.paused && !isFullscreen) {
-                // Try to enter fullscreen - prefer container for better control
-                const elementToFullscreen = containerElement;
-                
-                if (elementToFullscreen.requestFullscreen) {
-                    elementToFullscreen.requestFullscreen().then(() => {
-                        isFullscreen = true;
-                    }).catch(err => {
-                        console.log('Fullscreen request failed:', err);
-                        // Fallback to video element
-                        tryVideoFullscreen(videoElement);
-                    });
-                } else if (elementToFullscreen.webkitRequestFullscreen) {
-                    // iOS Safari
-                    elementToFullscreen.webkitRequestFullscreen();
-                    isFullscreen = true;
-                } else if (videoElement.webkitEnterFullscreen) {
-                    // iOS specific - video element fullscreen
-                    videoElement.webkitEnterFullscreen();
-                    isFullscreen = true;
-                } else if (elementToFullscreen.mozRequestFullScreen) {
-                    elementToFullscreen.mozRequestFullScreen();
-                    isFullscreen = true;
-                } else if (elementToFullscreen.msRequestFullscreen) {
-                    elementToFullscreen.msRequestFullscreen();
-                    isFullscreen = true;
-                } else {
-                    // Fallback
-                    tryVideoFullscreen(videoElement);
-                }
-            }
-        };
-        
-        const tryVideoFullscreen = (videoElement) => {
-            if (videoElement.webkitEnterFullscreen) {
-                videoElement.webkitEnterFullscreen();
-                isFullscreen = true;
-            }
-        };
-        
-        orientationHandler = checkAndEnterFullscreen;
-        
-        // Listen for orientation changes
-        window.addEventListener('orientationchange', () => {
-            // Small delay to ensure dimensions are updated
-            setTimeout(() => {
-                checkAndEnterFullscreen();
-            }, 200);
-        });
-        
-        // Also listen for resize (handles some cases)
-        let resizeTimeout;
-        window.addEventListener('resize', () => {
-            clearTimeout(resizeTimeout);
-            resizeTimeout = setTimeout(() => {
-                if (isMobile) {
-                    checkAndEnterFullscreen();
-                }
-            }, 200);
-        });
-        
-        // Check on video play
-        videoPlayer.addEventListener('playing', () => {
-            if (isMobile) {
-                setTimeout(() => {
-                    checkAndEnterFullscreen();
-                }, 500);
-            }
-        });
-        
-        // Reset fullscreen flag when exiting
-        const fullscreenChangeHandler = () => {
-            if (!document.fullscreenElement && 
-                !document.webkitFullscreenElement && 
-                !document.mozFullScreenElement && 
-                !document.msFullscreenElement) {
-                isFullscreen = false;
-            }
-        };
-        
-        document.addEventListener('fullscreenchange', fullscreenChangeHandler);
-        document.addEventListener('webkitfullscreenchange', fullscreenChangeHandler);
-        document.addEventListener('mozfullscreenchange', fullscreenChangeHandler);
-        document.addEventListener('MSFullscreenChange', fullscreenChangeHandler);
-    }
 }
 
 // Generate theater seats (visual only)

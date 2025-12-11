@@ -560,7 +560,8 @@ body {
     margin-top: -130px;
 }
 
-.video-container video {
+.video-container video,
+#youtubePlayer {
     width: 100%;
     height: 100%;
     object-fit: contain;
@@ -569,6 +570,20 @@ body {
     border-radius: 8px;
     box-shadow: 0 0 50px rgba(0, 0, 0, 0.8);
     pointer-events: auto;
+}
+
+#youtubePlayer {
+    position: relative;
+    overflow: hidden;
+}
+
+#youtubePlayer iframe {
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    pointer-events: auto;
+    border: 0;
+    display: block;
 }
 
 /* Exit Button */
