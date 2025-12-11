@@ -68,9 +68,9 @@ function generateShowtimes() {
     // TEST SHOWTIMES: Add test showtimes for today at the top
     const today = new Date();
     
-    // Test showtime 1: 9:33 PM
+    // Test showtime 1: 9:40 PM
     const testShowtimeDate1 = new Date(today);
-    testShowtimeDate1.setHours(21, 33, 0, 0); // 9:33 PM (21:33 in 24-hour format)
+    testShowtimeDate1.setHours(21, 40, 0, 0); // 9:40 PM (21:40 in 24-hour format)
     
     const testDateStr1 = testShowtimeDate1.toLocaleDateString('en-US', { 
         weekday: 'long', 
@@ -81,7 +81,7 @@ function generateShowtimes() {
     
     const testShowtime1 = {
         date: testDateStr1,
-        time: formatTime(21, 33), // 9:33 PM
+        time: formatTime(21, 40), // 9:40 PM
         fullDate: testShowtimeDate1,
         id: 'showtime-test-1',
         isTest: true // Mark as test showtime
@@ -107,9 +107,9 @@ function generateShowtimes() {
     };
     
     // Add test showtimes at the beginning of the array
-    // Order: 9:33 PM first, then 10:00 PM (unshift adds to beginning, so add in reverse order)
+    // Order: 9:40 PM first, then 10:00 PM (unshift adds to beginning, so add in reverse order)
     showtimes.unshift(testShowtime2); // 10:00 PM (added first, appears second)
-    showtimes.unshift(testShowtime1); // 9:33 PM (added second, appears first)
+    showtimes.unshift(testShowtime1); // 9:40 PM (added second, appears first)
     
     // Store showtimes globally
     allShowtimes = showtimes;
