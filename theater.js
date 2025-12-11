@@ -68,48 +68,27 @@ function generateShowtimes() {
     // TEST SHOWTIMES: Add test showtimes for today at the top
     const today = new Date();
     
-    // Test showtime 1: 9:40 PM
-    const testShowtimeDate1 = new Date(today);
-    testShowtimeDate1.setHours(21, 40, 0, 0); // 9:40 PM (21:40 in 24-hour format)
+    // Test showtime: 11:26 PM
+    const testShowtimeDate = new Date(today);
+    testShowtimeDate.setHours(23, 26, 0, 0); // 11:26 PM (23:26 in 24-hour format)
     
-    const testDateStr1 = testShowtimeDate1.toLocaleDateString('en-US', { 
+    const testDateStr = testShowtimeDate.toLocaleDateString('en-US', { 
         weekday: 'long', 
         month: 'long', 
         day: 'numeric',
         year: 'numeric'
     });
     
-    const testShowtime1 = {
-        date: testDateStr1,
-        time: formatTime(21, 40), // 9:40 PM
-        fullDate: testShowtimeDate1,
-        id: 'showtime-test-1',
+    const testShowtime = {
+        date: testDateStr,
+        time: formatTime(23, 26), // 11:26 PM
+        fullDate: testShowtimeDate,
+        id: 'showtime-test',
         isTest: true // Mark as test showtime
     };
     
-    // Test showtime 2: 10:00 PM
-    const testShowtimeDate2 = new Date(today);
-    testShowtimeDate2.setHours(22, 0, 0, 0); // 10:00 PM (22:00 in 24-hour format)
-    
-    const testDateStr2 = testShowtimeDate2.toLocaleDateString('en-US', { 
-        weekday: 'long', 
-        month: 'long', 
-        day: 'numeric',
-        year: 'numeric'
-    });
-    
-    const testShowtime2 = {
-        date: testDateStr2,
-        time: formatTime(22, 0), // 10:00 PM
-        fullDate: testShowtimeDate2,
-        id: 'showtime-test-2',
-        isTest: true // Mark as test showtime
-    };
-    
-    // Add test showtimes at the beginning of the array
-    // Order: 9:40 PM first, then 10:00 PM (unshift adds to beginning, so add in reverse order)
-    showtimes.unshift(testShowtime2); // 10:00 PM (added first, appears second)
-    showtimes.unshift(testShowtime1); // 9:40 PM (added second, appears first)
+    // Add test showtime at the beginning of the array
+    showtimes.unshift(testShowtime); // 11:26 PM
     
     // Store showtimes globally
     allShowtimes = showtimes;
