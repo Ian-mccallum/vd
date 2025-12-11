@@ -894,11 +894,12 @@ body {
     .video-container {
         width: 100%;
         max-width: none;
-        margin-top: -80px;
+        margin-top: -150px;
         padding: 0 10px;
     }
     
-    .video-container video {
+    .video-container video,
+    #youtubePlayer {
         border-radius: 4px;
     }
     
@@ -934,7 +935,8 @@ body {
     }
     
     .theater-background-img {
-        opacity: 0.1;
+        opacity: 0.7;
+        filter: blur(1px);
     }
     
     /* Exit Button Mobile */
@@ -1240,7 +1242,8 @@ body {
     
     /* Hide theater background in landscape for cleaner fullscreen */
     .theater-background-img {
-        opacity: 0.05;
+        opacity: 0.7;
+        filter: blur(1px);
     }
 }
 
