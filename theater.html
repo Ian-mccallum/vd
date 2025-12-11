@@ -107,12 +107,362 @@
         </div>
     </div>
 
+    <!-- Live Movie Chat Section -->
+    <div class="theater-chat-section">
+        <h2 class="section-title">🎬 Live Movie Chat 🎬</h2>
+        <p class="chat-subtitle">Chat with fellow moviegoers in anticipation of "The Dre Movie"!</p>
+        <div class="chat-container">
+            <div class="chat-header">
+                <div class="online-status">
+                    <span class="status-dot"></span>
+                    <span id="theaterOnlineCount">0</span> moviegoers online
+                </div>
+            </div>
+            <div class="chat-messages" id="theaterChatMessages">
+                <div class="chat-welcome">Welcome to the Live Movie Chat! Share your excitement for "The Dre Movie"! 🎬✨</div>
+            </div>
+            <div class="chat-input-container">
+                <input 
+                    type="text" 
+                    id="theaterUsernameInput" 
+                    placeholder="Your name..." 
+                    maxlength="20"
+                    class="username-input"
+                >
+                <input 
+                    type="text" 
+                    id="theaterMessageInput" 
+                    placeholder="Share your excitement..." 
+                    maxlength="200"
+                    class="message-input"
+                >
+                <button id="theaterSendBtn" class="send-btn">Send 🎬</button>
+            </div>
+        </div>
+    </div>
+
     <footer class="theater-footer">
         <p>© 2025 Huzz Frick Movie Theater - Where Cinema Meets Rizz</p>
         <p class="footer-note">Experience the premier of "The Dre Movie" in style</p>
     </footer>
 
     <script src="theater.js"></script>
+    
+    <!-- Firebase CDN for Theater Chat -->
+    <!-- 
+        IMPORTANT: Make sure Firebase Realtime Database rules allow writes to 'theaterMessages' and 'theaterPresence'
+        Go to Firebase Console > Realtime Database > Rules and update to:
+        
+        {
+          "rules": {
+            "messages": {
+              ".read": true,
+              ".write": true
+            },
+            "presence": {
+              ".read": true,
+              ".write": true
+            },
+            "theaterMessages": {
+              ".read": true,
+              ".write": true
+            },
+            "theaterPresence": {
+              ".read": true,
+              ".write": true
+            }
+          }
+        }
+    -->
+    <script type="module">
+        // Import the functions you need from the SDKs you need
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js";
+        import { getDatabase, ref, push, onValue, onDisconnect, set, serverTimestamp } from "https://www.gstatic.com/firebasejs/12.4.0/firebase-database.js";
+
+        // Wait for DOM to be fully loaded
+        document.addEventListener('DOMContentLoaded', async () => {
+            // Your web app's Firebase configuration
+            const firebaseConfig = {
+                apiKey: "AIzaSyCdhX0NRDYY6_J0nJknJWeqALzV2gb213A",
+                authDomain: "issaac-52d8d.firebaseapp.com",
+                databaseURL: "https://issaac-52d8d-default-rtdb.firebaseio.com",
+                projectId: "issaac-52d8d",
+                storageBucket: "issaac-52d8d.firebasestorage.app",
+                messagingSenderId: "949896369117",
+                appId: "1:949896369117:web:665940c8f7bd79fe215c34",
+                measurementId: "G-NFCC35BS56"
+            };
+
+            // Initialize Firebase
+            let app;
+            let database;
+            
+            try {
+                // Check if Firebase is already initialized
+                try {
+                    app = initializeApp(firebaseConfig);
+                    console.log('Firebase initialized successfully');
+                } catch (error) {
+                    if (error.code === 'app/duplicate-app') {
+                        // Firebase already initialized, get existing app
+                        const { getApp } = await import("https://www.gstatic.com/firebasejs/12.4.0/firebase-app.js");
+                        app = getApp();
+                        console.log('Using existing Firebase app');
+                    } else {
+                        throw error;
+                    }
+                }
+                
+                database = getDatabase(app);
+                console.log('Database initialized:', database);
+                
+                // Test database connection
+                const testRef = ref(database, '.info/connected');
+                onValue(testRef, (snapshot) => {
+                    if (snapshot.val() === true) {
+                        console.log('✅ Connected to Firebase Realtime Database');
+                    } else {
+                        console.warn('⚠️ Not connected to Firebase Realtime Database');
+                    }
+                });
+            } catch (error) {
+                console.error('Firebase initialization error:', error);
+                alert('Failed to initialize Firebase. Please refresh the page. Error: ' + error.message);
+                return;
+            }
+
+            // Chat elements
+            const messageInput = document.getElementById('theaterMessageInput');
+            const usernameInput = document.getElementById('theaterUsernameInput');
+            const sendBtn = document.getElementById('theaterSendBtn');
+            const chatMessages = document.getElementById('theaterChatMessages');
+            const onlineCount = document.getElementById('theaterOnlineCount');
+
+            // Check if elements exist
+            if (!messageInput || !usernameInput || !sendBtn || !chatMessages || !onlineCount) {
+                console.error('Chat elements not found!', {
+                    messageInput: !!messageInput,
+                    usernameInput: !!usernameInput,
+                    sendBtn: !!sendBtn,
+                    chatMessages: !!chatMessages,
+                    onlineCount: !!onlineCount
+                });
+                return;
+            }
+
+            // Load or generate username
+            let username = localStorage.getItem('theaterChatUsername');
+            if (!username) {
+                username = 'Moviegoer' + Math.floor(Math.random() * 10000);
+                localStorage.setItem('theaterChatUsername', username);
+            }
+            usernameInput.value = username;
+
+            // Update username on change
+            usernameInput.addEventListener('change', () => {
+                username = usernameInput.value.trim() || 'Anonymous';
+                localStorage.setItem('theaterChatUsername', username);
+            });
+
+            // HTML escape function
+            function escapeHtml(text) {
+                const div = document.createElement('div');
+                div.textContent = text;
+                return div.innerHTML;
+            }
+
+            // Send message function
+            function sendMessage() {
+                const message = messageInput.value.trim();
+                if (!message) {
+                    console.log('Empty message, not sending');
+                    return;
+                }
+
+                if (!database) {
+                    console.error('Database not initialized!');
+                    alert('Database not initialized. Please refresh the page.');
+                    return;
+                }
+
+                console.log('=== SENDING MESSAGE ===');
+                console.log('Message:', message);
+                console.log('Username:', username);
+                console.log('Database:', database);
+                console.log('Database URL:', database.app.options.databaseURL);
+
+                const messagesRef = ref(database, 'theaterMessages');
+                console.log('Messages ref:', messagesRef);
+                
+                // Try to send the message
+                const messageData = {
+                    username: username,
+                    message: message,
+                    timestamp: serverTimestamp()
+                };
+                console.log('Message data:', messageData);
+                
+                push(messagesRef, messageData).then((result) => {
+                    console.log('✅ Message sent successfully!');
+                    console.log('Result:', result);
+                    console.log('Message key:', result.key);
+                    messageInput.value = '';
+                }).catch((error) => {
+                    console.error('❌ ERROR SENDING MESSAGE:');
+                    console.error('Error object:', error);
+                    console.error('Error code:', error.code);
+                    console.error('Error message:', error.message);
+                    console.error('Error name:', error.name);
+                    console.error('Error stack:', error.stack);
+                    
+                    // Try to stringify the error
+                    try {
+                        console.error('Error JSON:', JSON.stringify(error, Object.getOwnPropertyNames(error)));
+                    } catch (e) {
+                        console.error('Could not stringify error');
+                    }
+                    
+                    // More specific error messages
+                    let errorMsg = 'Failed to send message. ';
+                    const errorCode = error.code || error.name || '';
+                    const errorMessage = error.message || '';
+                    
+                    if (errorCode.includes('PERMISSION') || errorCode.includes('permission')) {
+                        errorMsg += 'Permission denied. Check Firebase database rules at: https://console.firebase.google.com/project/issaac-52d8d/database/issaac-52d8d-default-rtdb/rules';
+                    } else if (errorCode.includes('UNAVAILABLE') || errorCode.includes('unavailable')) {
+                        errorMsg += 'Firebase is unavailable. Check your internet connection.';
+                    } else if (errorCode.includes('NETWORK') || errorCode.includes('network')) {
+                        errorMsg += 'Network error. Check your connection.';
+                    } else if (errorMessage) {
+                        errorMsg += errorMessage;
+                    } else {
+                        errorMsg += 'Unknown error. See console for details.';
+                    }
+                    
+                    alert(errorMsg);
+                });
+            }
+
+            // Test Firebase connection
+            console.log('🧪 Testing Firebase connection...');
+            const testRef = ref(database, 'theaterMessages');
+            push(testRef, {
+                test: true,
+                timestamp: serverTimestamp()
+            }).then(() => {
+                console.log('✅ Firebase write test successful!');
+                // Remove the test message
+                const testMessagesRef = ref(database, 'theaterMessages');
+                onValue(testMessagesRef, (snapshot) => {
+                    snapshot.forEach((childSnapshot) => {
+                        const data = childSnapshot.val();
+                        if (data.test === true) {
+                            set(ref(database, 'theaterMessages/' + childSnapshot.key), null);
+                        }
+                    });
+                }, { onlyOnce: true });
+            }).catch((error) => {
+                console.error('❌ Firebase write test failed:', error);
+                console.error('This means messages cannot be sent. Check Firebase rules.');
+            });
+
+            // Send on button click
+            sendBtn.addEventListener('click', (e) => {
+                e.preventDefault();
+                console.log('Send button clicked!');
+                sendMessage();
+            });
+
+            // Send on Enter key
+            messageInput.addEventListener('keypress', (e) => {
+                if (e.key === 'Enter') {
+                    e.preventDefault();
+                    console.log('Enter key pressed!');
+                    sendMessage();
+                }
+            });
+            
+            console.log('✅ Chat event listeners attached');
+
+            // Listen for messages
+            console.log('Setting up message listener...');
+            const messagesRef = ref(database, 'theaterMessages');
+            console.log('Messages ref for listener:', messagesRef);
+            
+            onValue(messagesRef, (snapshot) => {
+                console.log('📨 Message received from Firebase:', snapshot.exists());
+                console.log('Snapshot:', snapshot.val());
+                chatMessages.innerHTML = '';
+                const messages = [];
+                
+                snapshot.forEach((childSnapshot) => {
+                    messages.push({
+                        key: childSnapshot.key,
+                        ...childSnapshot.val()
+                    });
+                });
+
+                // Sort by timestamp and keep last 50 messages
+                messages.sort((a, b) => (a.timestamp || 0) - (b.timestamp || 0));
+                const recentMessages = messages.slice(-50);
+
+                if (recentMessages.length === 0) {
+                    chatMessages.innerHTML = '<div class="chat-welcome">Welcome to the Live Movie Chat! Share your excitement for "The Dre Movie"! 🎬✨</div>';
+                } else {
+                    recentMessages.forEach((data) => {
+                        const messageDiv = document.createElement('div');
+                        messageDiv.className = 'chat-message';
+                        
+                        const isCurrentUser = data.username === username;
+                        if (isCurrentUser) {
+                            messageDiv.classList.add('own-message');
+                        }
+                        
+                        messageDiv.innerHTML = `
+                            <span class="message-username">${escapeHtml(data.username)}:</span>
+                            <span class="message-text">${escapeHtml(data.message)}</span>
+                        `;
+                        
+                        chatMessages.appendChild(messageDiv);
+                    });
+                    
+                    // Auto scroll to bottom
+                    chatMessages.scrollTop = chatMessages.scrollHeight;
+                }
+            });
+
+            // Online presence
+            const sessionId = Date.now() + '_' + Math.floor(Math.random() * 1000000);
+            const presenceRef = ref(database, 'theaterPresence/' + sessionId);
+            
+            set(presenceRef, {
+                online: true,
+                timestamp: serverTimestamp()
+            });
+
+            onDisconnect(presenceRef).remove();
+
+            // Count online users
+            const presenceListRef = ref(database, 'theaterPresence');
+            onValue(presenceListRef, (snapshot) => {
+                const count = snapshot.size;
+                onlineCount.textContent = count;
+            });
+
+            // Clean up old presence (older than 5 minutes)
+            setInterval(() => {
+                onValue(presenceListRef, (snapshot) => {
+                    const now = Date.now();
+                    snapshot.forEach((childSnapshot) => {
+                        const data = childSnapshot.val();
+                        if (data.timestamp && (now - data.timestamp > 300000)) {
+                            set(ref(database, 'theaterPresence/' + childSnapshot.key), null);
+                        }
+                    });
+                }, { onlyOnce: true });
+            }, 60000);
+        });
+    </script>
 </body>
 </html>
 

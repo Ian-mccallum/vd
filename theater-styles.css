@@ -1247,6 +1247,118 @@ body {
     }
 }
 
+/* Theater Chat Section */
+.theater-chat-section {
+    max-width: 900px;
+    margin: 60px auto;
+    padding: 30px 20px;
+}
+
+.chat-subtitle {
+    text-align: center;
+    font-size: 1.2rem;
+    margin-bottom: 25px;
+    color: #ffd700;
+    font-style: italic;
+    opacity: 0.9;
+}
+
+.theater-chat-section .chat-container {
+    background: linear-gradient(135deg, rgba(139, 0, 0, 0.3) 0%, rgba(0, 0, 0, 0.5) 100%);
+    backdrop-filter: blur(15px);
+    border: 3px solid rgba(255, 215, 0, 0.5);
+    box-shadow: 
+        0 0 30px rgba(139, 0, 0, 0.5),
+        inset 0 0 20px rgba(255, 215, 0, 0.1);
+}
+
+.theater-chat-section .chat-header {
+    background: linear-gradient(135deg, rgba(139, 0, 0, 0.5) 0%, rgba(0, 0, 0, 0.7) 100%);
+    border-bottom: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.theater-chat-section .chat-messages {
+    background: rgba(0, 0, 0, 0.4);
+    border-top: 1px solid rgba(255, 215, 0, 0.2);
+    border-bottom: 1px solid rgba(255, 215, 0, 0.2);
+}
+
+.theater-chat-section .chat-welcome {
+    color: #ffd700;
+    text-shadow: 0 0 10px rgba(255, 215, 0, 0.5);
+}
+
+.theater-chat-section .chat-message {
+    background: rgba(255, 255, 255, 0.08);
+    border-left: 3px solid rgba(255, 215, 0, 0.3);
+}
+
+.theater-chat-section .chat-message.own-message {
+    background: rgba(139, 0, 0, 0.3);
+    border-left: 3px solid #ffd700;
+}
+
+.theater-chat-section .message-username {
+    color: #ffd700;
+    font-weight: bold;
+}
+
+.theater-chat-section .chat-input-container {
+    background: rgba(0, 0, 0, 0.5);
+    border-top: 2px solid rgba(255, 215, 0, 0.3);
+}
+
+.theater-chat-section .username-input,
+.theater-chat-section .message-input {
+    background: rgba(255, 255, 255, 0.1);
+    border: 2px solid rgba(255, 215, 0, 0.3);
+    color: white;
+}
+
+.theater-chat-section .username-input:focus,
+.theater-chat-section .message-input:focus {
+    border-color: #ffd700;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.3);
+}
+
+.theater-chat-section .send-btn {
+    background: linear-gradient(135deg, #8b0000 0%, #ff0000 50%, #ff4500 100%);
+    border: 2px solid #ffd700;
+    box-shadow: 0 0 15px rgba(255, 215, 0, 0.3);
+}
+
+.theater-chat-section .send-btn:hover {
+    background: linear-gradient(135deg, #a00000 0%, #ff1a1a 50%, #ff5500 100%);
+    box-shadow: 0 0 20px rgba(255, 215, 0, 0.5);
+    transform: scale(1.05);
+}
+
+.theater-chat-section .status-dot {
+    background: #ffd700;
+    box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+}
+
+.theater-chat-section .online-status {
+    color: #ffd700;
+}
+
+/* Mobile Chat Adjustments */
+@media (max-width: 768px) {
+    .theater-chat-section {
+        margin: 40px 16px;
+        padding: 20px 16px;
+    }
+    
+    .chat-subtitle {
+        font-size: 1rem;
+        margin-bottom: 20px;
+    }
+    
+    .theater-chat-section .chat-messages {
+        height: 300px;
+    }
+}
+
 /* Touch-friendly interactions for mobile */
 @media (max-width: 768px) {
     /* Ensure all clickable elements have adequate touch targets */
