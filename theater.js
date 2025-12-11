@@ -13,8 +13,11 @@ const GOOGLE_DRIVE_EMBED_URL = `https://drive.google.com/file/d/${GOOGLE_DRIVE_F
 function generateShowtimes() {
     const showtimesGrid = document.getElementById('showtimesGrid');
     
-    // Set to Thursday, December 11, 2025 at 9:10 AM Central Time
-    const premiereDate = new Date(2025, 11, 11, 9, 10, 0, 0); // Month is 0-indexed, so 11 = December
+    // Set premiere date to tomorrow at 9:10 AM
+    const tomorrow = new Date();
+    tomorrow.setDate(tomorrow.getDate() + 1); // Tomorrow
+    tomorrow.setHours(9, 10, 0, 0); // 9:10 AM
+    const premiereDate = tomorrow;
     
     const dateStr = premiereDate.toLocaleDateString('en-US', { 
         weekday: 'long', 
@@ -64,31 +67,6 @@ function generateShowtimes() {
         }
         showtimeIndex++;
     }
-    
-    // TEST SHOWTIMES: Add test showtimes for today at the top
-    const today = new Date();
-    
-    // Test showtime: 11:26 PM
-    const testShowtimeDate = new Date(today);
-    testShowtimeDate.setHours(23, 26, 0, 0); // 11:26 PM (23:26 in 24-hour format)
-    
-    const testDateStr = testShowtimeDate.toLocaleDateString('en-US', { 
-        weekday: 'long', 
-        month: 'long', 
-        day: 'numeric',
-        year: 'numeric'
-    });
-    
-    const testShowtime = {
-        date: testDateStr,
-        time: formatTime(23, 26), // 11:26 PM
-        fullDate: testShowtimeDate,
-        id: 'showtime-test',
-        isTest: true // Mark as test showtime
-    };
-    
-    // Add test showtime at the beginning of the array
-    showtimes.unshift(testShowtime); // 11:26 PM
     
     // Store showtimes globally
     allShowtimes = showtimes;
@@ -148,11 +126,7 @@ function renderShowtimes(showtimes) {
             statusText = 'AVAILABLE';
         }
         
-        // Add TEST indicator for test showtime
-        const testIndicator = showtime.isTest ? '<div style="background: #ff6b00; color: white; padding: 4px 8px; border-radius: 4px; font-size: 0.7rem; font-weight: bold; margin-bottom: 8px; display: inline-block;">🧪 TEST</div>' : '';
-        
         card.innerHTML = `
-            ${testIndicator}
             <div class="showtime-time">${showtime.time}</div>
             <div class="showtime-status status-${status}">
                 ${statusText}
