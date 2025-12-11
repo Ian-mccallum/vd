@@ -1381,9 +1381,21 @@ footer {
         padding: 12px 10px;
     }
     
+    .dre-movie-hero {
+        padding: 30px 24px;
+        margin: 30px 16px;
+    }
+    
     .hero-content {
         grid-template-columns: 1fr;
         gap: 30px;
+    }
+    
+    .hero-poster {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        width: 100%;
     }
     
     .hero-title {
@@ -1407,6 +1419,17 @@ footer {
     
     .movie-poster-img {
         max-width: 100%;
+        margin: 0 auto;
+        display: block;
+        transform: translateX(-8px);
+    }
+    
+    .movie-poster-img:hover {
+        transform: translateX(-8px) rotateY(5deg) scale(1.02);
+    }
+    
+    .hero-info {
+        text-align: center;
     }
 }
 
