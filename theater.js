@@ -13,11 +13,8 @@ const GOOGLE_DRIVE_EMBED_URL = `https://drive.google.com/file/d/${GOOGLE_DRIVE_F
 function generateShowtimes() {
     const showtimesGrid = document.getElementById('showtimesGrid');
     
-    // Set premiere date to tomorrow at 9:10 AM
-    const tomorrow = new Date();
-    tomorrow.setDate(tomorrow.getDate() + 1); // Tomorrow
-    tomorrow.setHours(9, 10, 0, 0); // 9:10 AM
-    const premiereDate = tomorrow;
+    // Set premiere date to Friday, December 12, 2025 at 9:10 AM
+    const premiereDate = new Date(2025, 11, 12, 9, 10, 0, 0); // Month is 0-indexed, so 11 = December
     
     const dateStr = premiereDate.toLocaleDateString('en-US', { 
         weekday: 'long', 
